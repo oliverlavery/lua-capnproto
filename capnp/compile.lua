@@ -426,6 +426,10 @@ function comp_parse_struct_data(res, nodes, struct, fields, size, name)
 
         elseif field.type_name == "text" then
             local off = field.slot.offset
+            local default = 'nil'
+            if field.default_value and field.default_value ~= '""' then
+                default = field.default_value
+            end
             insert(res, format([[
 
         -- text
@@ -435,9 +439,9 @@ function comp_parse_struct_data(res, nodes, struct, fields, size, name)
             local p8 = ffi_cast(pint8, p32 + (%d + %d + 1 + off) * 2)
             s["%s"] = ffi_string(p8, num - 1)
         else
-            s["%s"] = nil
+            s["%s"] = %s
         end
-]], name, off, struct.dataWordCount, off, field.name, field.name))
+]], name, off, struct.dataWordCount, off, field.name, field.name, default))
 
         elseif field.type_name == "data" then
             local off = field.slot.offset
