@@ -78,6 +78,10 @@ struct T1 {
 # Doesn't work for now
 #    const constT2 :T2 = (f0 = 12345.67, f1 = 9876.54, sd0 = "\0\1\2\3");
     u64 @28 :UInt64;
+
+# Make sure defaults are correctly handled
+    t1 @29 :Text = "Hello";
+    d1 @30 :Data = "\x31\x33\x07";
 }
 
 struct T3 {

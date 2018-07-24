@@ -217,7 +217,16 @@ function _set_field_default(nodes, field, slot)
                 field.print_default_value = v and 1 or 0
                 field.default_value = field.print_default_value
             elseif field.type_name == "text" or field.type_name == "data" then
-                field.print_default_value = '"' .. v .. '"'
+                if slot.hadExplicitDefault then
+                    if field.type_name == "data" then
+                        v = v:gsub('.', function (c)
+                            return string.format('\\x%02X', string.byte(c))
+                        end)
+                    end
+                    field.print_default_value = '"' .. v .. '"'
+                else
+                    field.print_default_value = 'Nil'
+                end
                 field.default_value = field.print_default_value
             elseif field.type_name == "struct" or field.type_name == "list"
                     or field.type_name == "object"
@@ -1303,7 +1312,6 @@ end
 
 function _M.compile(schema)
     local res = {}
-
     comp_header(res, schema.nodes)
     comp_body(res, schema)
 
