@@ -36,11 +36,12 @@ end
 
 
 -- table.new(narr, nrec)
+lcoal tmp = table.new
 local ok, new_tab = pcall(require, "table.new")
 if not ok then
     new_tab = function () return {} end
 end
-
+table.new = tmp or table.new
 
 local _M = new_tab(0, 32)
 

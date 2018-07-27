@@ -115,12 +115,12 @@ local pbool    = ffi_typeof("uint8_t *")
 local pfloat32 = ffi_typeof("float *")
 local pfloat64 = ffi_typeof("double *")
 
-
+local tmp = table.new
 local ok, new_tab = pcall(require, "table.new")
-
 if not ok then
     new_tab = function (narr, nrec) return {} end
 end
+table.new = tmp or table.new
 
 local round8 = function(size)
     return ceil(size / 8) * 8
