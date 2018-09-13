@@ -380,9 +380,9 @@ function comp_parse_struct_data(res, nodes, struct, fields, size, name)
         if not s["%s"] then
             s["%s"] = new_tab(0, 4)
         end
-        _M.%s["%s"].parse_struct_data(p32, _M.%s.dataWordCount,
+        _M.%s.parse_struct_data(p32, _M.%s.dataWordCount,
                 _M.%s.pointerCount, header, s["%s"])
-]], field.name, field.name, name, field.name, name, name, field.name))
+]], field.name, field.name, field.type_display_name, name, name, field.name))
 
         elseif field.type_name == "enum" then
             insert(res, format([[
@@ -601,7 +601,6 @@ function comp_flat_serialize(res, nodes, struct, fields, size, name)
 ]], field.discriminantValue))
         end
         if field.group then
-            dbgf("field %s: group", field.name)
             -- group size is the same as the struct, so we can use "size" to
             -- represent group size
 
@@ -610,9 +609,9 @@ function comp_flat_serialize(res, nodes, struct, fields, size, name)
         if ]] .. check_type["group"] .. [[ then
             -- groups are just namespaces, field offsets are set within parent
             -- structs
-            pos = pos + _M.%s.%s.flat_serialize(value, p32, pos) - %d
+            pos = pos + _M.%s.flat_serialize(value, p32, pos) - %d
         end
-]], name, field.name, size))
+]], field.type_display_name, size))
 
         elseif field.type_name == "enum" then
             dbgf("field %s: enum", field.name)
@@ -1107,7 +1106,7 @@ function comp_node(res, nodes, node, name)
     insert(res, format([[
 
 _M.%s = {
-]], name))
+]], node.type_name))
         s.type_name = node.type_name
         insert(res, format([[
     id = "%s",
