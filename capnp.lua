@@ -36,7 +36,7 @@ end
 
 
 -- table.new(narr, nrec)
-lcoal tmp = table.new
+local tmp = table.new
 local ok, new_tab = pcall(require, "table.new")
 if not ok then
     new_tab = function () return {} end
